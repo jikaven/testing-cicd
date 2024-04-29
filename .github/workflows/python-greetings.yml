@@ -1,0 +1,50 @@
+name: GitHub Actions Demo
+
+on: push
+
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+jobs:
+  install-pip-deps:
+    runs-on: self-hosted
+    steps:
+      - run: echo "This job installs pip dependencies"
+  deploy-to-dev:
+    runs-on: self-hosted
+    needs: install-pip-deps
+    steps:
+      - run: echo "This job deploys to dev"
+  tests-on-dev:
+    runs-on: self-hosted
+    needs: deploy-to-dev
+    steps:
+      - run: echo "This job runs tests on dev"
+  deploy-to-staging:
+    runs-on: self-hosted
+    needs: tests-on-dev
+    steps:
+      - run: echo "This job deploys to staging"
+  tests-on-staging:
+    runs-on: self-hosted
+    needs: deploy-to-staging
+    steps:
+      - run: echo "This job runs tests on staging"
+  deploy-to-preprod:
+    runs-on: self-hosted
+    needs: tests-on-staging
+    steps:
+      - run: echo "This job deploys to preprod"
+  tests-on-preprod:
+    runs-on: self-hosted
+    needs: deploy-to-preprod
+    steps:
+      - run: echo "This job runs tests to preprod"
+  deploy-to-prod:
+    runs-on: self-hosted
+    needs: tests-on-preprod
+    steps:
+      - run: echo "This job deploys to prod"
+  Tests-on-prod:
+    runs-on: self-hosted
+    needs: deploy-to-prod
+    steps:
+      - run: echo "This job runs tests on prod"
