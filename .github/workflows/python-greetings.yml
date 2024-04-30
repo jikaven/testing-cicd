@@ -1,8 +1,7 @@
-name: GitHub Actions Demo
+name: GitHub Actions
 
 on: push
 
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 jobs:
   install-pip-deps:
     runs-on: self-hosted
@@ -17,14 +16,13 @@ jobs:
         working-directory: greetings
 
   deploy-to-dev:
-    runs-on: self-hosted
-    needs: install-pip-deps
-    steps:
-      - name: Deploy
-        uses: "./.github/actions"
-        with:
-          environment: dev
-          port: 7001
+    uses: ./.github/actions/deploy.yml
+    # steps:
+    #   - name: Deploy
+    #     uses: "./.github/actions"
+    #     with:
+    #       environment: dev
+    #       port: 7001
 
   # deploy-to-prod:
   #   runs-on: self-hosted
