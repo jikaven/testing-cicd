@@ -16,11 +16,14 @@ jobs:
         working-directory: greetings
 
   deploy-to-dev:
+    runs-on: self-hosted
     name: Deploy to dev
-    uses: "./.github/actions/deploy.yml@main"
-    with:
-      environment: dev
-      port: 7000
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - uses: actions/deploy@main
+        with:
+          environment: dev
+          port: 7000
     # steps:
     #   - name: Deploy
     #     uses: "./.github/actions"

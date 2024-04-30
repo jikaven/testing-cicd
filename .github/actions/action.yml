@@ -1,0 +1,30 @@
+name: Deploy to environment
+description: Action to deploy an environment
+
+inputs:
+  environment:
+    required: true
+    description: Environment to launch service on
+  port:
+    required: true
+    description: Port to launch service on
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3.5.2
+      with:
+        repository: mtararujs/python-greetings
+        path: greetings
+
+    - shell: bash
+      run: echo "This job deploys to ${{ inputs.environment }}"
+
+    - shell: bash
+      run: pm2 delete greetings-app-${{ inputs.environment }} || true
+      working-directory: greetings
+
+    - shell: bash
+      run: pm2 start app.py --name greetings-app-${{ inputs.environment }} -- --port ${{ inputs.port }}
+      working-directory: greetings
