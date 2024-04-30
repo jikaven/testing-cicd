@@ -5,7 +5,7 @@ on: push
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 jobs:
   install-pip-deps:
-    runs-on: self-hosted
+    runs-on: ubuntu
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.2
@@ -17,7 +17,8 @@ jobs:
         working-directory: greetings
 
   deploy-to-dev:
-    runs-on: self-hosted
+    runs-on: ubuntu
+    needs: install-pip-deps
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.2
