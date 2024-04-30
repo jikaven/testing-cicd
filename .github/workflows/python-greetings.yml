@@ -7,44 +7,41 @@ jobs:
   install-pip-deps:
     runs-on: self-hosted
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: mtararujs/python-greetings
+          path: greetings
       - run: echo "This job installs pip dependencies"
+      - run: pip install -r requirements.txt
+        working-directory: greetings
+
   deploy-to-dev:
     runs-on: self-hosted
-    needs: install-pip-deps
     steps:
-      - run: echo "This job deploys to dev"
-  tests-on-dev:
-    runs-on: self-hosted
-    needs: deploy-to-dev
-    steps:
-      - run: echo "This job runs tests on dev"
-  deploy-to-staging:
-    runs-on: self-hosted
-    needs: tests-on-dev
-    steps:
-      - run: echo "This job deploys to staging"
-  tests-on-staging:
-    runs-on: self-hosted
-    needs: deploy-to-staging
-    steps:
-      - run: echo "This job runs tests on staging"
-  deploy-to-preprod:
-    runs-on: self-hosted
-    needs: tests-on-staging
-    steps:
-      - run: echo "This job deploys to preprod"
-  tests-on-preprod:
-    runs-on: self-hosted
-    needs: deploy-to-preprod
-    steps:
-      - run: echo "This job runs tests to preprod"
-  deploy-to-prod:
-    runs-on: self-hosted
-    needs: tests-on-preprod
-    steps:
-      - run: echo "This job deploys to prod"
-  Tests-on-prod:
-    runs-on: self-hosted
-    needs: deploy-to-prod
-    steps:
-      - run: echo "This job runs tests on prod"
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
+      - name: Deploy
+        uses: "./.github/actions/deployment.yml"
+        with:
+          environment: dev
+          port: 7001
+
+  # deploy-to-prod:
+  #   runs-on: self-hosted
+  #   needs: tests-on-preprod
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3.5.2
+  #       with:
+  #         repository: mtararujs/python-greetings
+  #         path: greetings
+  #     - run: echo "This job deploys to prod"
+  #     - run: pm2 delete greetings-app-dev || true
+  #     - run: pm2 start app.py --name greetings-app-dev -- --port 7004
+
+  # Tests-on-prod:
+  #   runs-on: self-hosted
+  #   needs: deploy-to-prod
+  #   steps:
+  #     - run: echo "This job runs tests on prod"
