@@ -1,0 +1,27 @@
+name: Test environment
+description: Action to test an environment
+
+inputs:
+  env:
+    required: true
+    description: Environment to test service on
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3.5.2
+      with:
+        repository: mtararujs/course-js-api-framework
+        path: test
+
+    - shell: bash
+      run: echo "This job tests ${{ inputs.env }}"
+
+    - shell: bash
+      run: npm install
+      working-directory: test
+
+    - shell: bash
+      run: npm run greetings greetings_${{ inputs.env }}
+      working-directory: test

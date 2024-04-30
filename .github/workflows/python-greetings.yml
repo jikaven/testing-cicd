@@ -18,34 +18,83 @@ jobs:
   deploy-to-dev:
     runs-on: self-hosted
     name: Deploy to dev
+    needs: install-pip-deps
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/deploy
         with:
           env: dev
-          port: 7000
-    # steps:
-    #   - name: Deploy
-    #     uses: "./.github/actions"
-    #     with:
-    #       environment: dev
-    #       port: 7001
+          port: 7001
 
-  # deploy-to-prod:
-  #   runs-on: self-hosted
-  #   needs: tests-on-preprod
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3.5.2
-  #       with:
-  #         repository: mtararujs/python-greetings
-  #         path: greetings
-  #     - run: echo "This job deploys to prod"
-  #     - run: pm2 delete greetings-app-dev || true
-  #     - run: pm2 start app.py --name greetings-app-dev -- --port 7004
+  test-on-dev:
+    runs-on: self-hosted
+    name: Test on dev
+    needs: deploy-to-dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test
+        with:
+          env: dev
 
-  # Tests-on-prod:
-  #   runs-on: self-hosted
-  #   needs: deploy-to-prod
-  #   steps:
-  #     - run: echo "This job runs tests on prod"
+  deploy-to-staging:
+    runs-on: self-hosted
+    name: Deploy to staging
+    needs: test-on-dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/deploy
+        with:
+          env: staging
+          port: 7002
+
+  test-on-staging:
+    runs-on: self-hosted
+    name: Test on dev
+    needs: deploy-to-staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test
+        with:
+          env: staging
+
+  deploy-to-preprod:
+    runs-on: self-hosted
+    name: Deploy to preprod
+    needs: test-on-staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/deploy
+        with:
+          env: preprod
+          port: 7003
+
+  test-on-preprod:
+    runs-on: self-hosted
+    name: Test on preprod
+    needs: deploy-to-preprod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test
+        with:
+          env: preprod
+
+  deploy-to-prod:
+    runs-on: self-hosted
+    name: Deploy to prod
+    needs: test-on-preprod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/deploy
+        with:
+          env: prod
+          port: 7004
+
+  test-on-prod:
+    runs-on: self-hosted
+    name: Test on prod
+    needs: deploy-to-prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test
+        with:
+          env: prod

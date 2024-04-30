@@ -19,12 +19,12 @@ runs:
         path: greetings
 
     - shell: bash
-      run: echo "This job deploys to ${{ inputs.environment }}"
+      run: echo "This job deploys to ${{ inputs.env }}"
 
     - shell: bash
-      run: pm2 delete greetings-app-${{ inputs.environment }} || true
+      run: pm2 delete greetings-app-${{ inputs.env }} || true
       working-directory: greetings
 
     - shell: bash
-      run: pm2 start app.py --name greetings-app-${{ inputs.environment }} -- --port ${{ inputs.port }}
+      run: pm2 start app.py --name greetings-app-${{ inputs.env }} -- --port ${{ inputs.port }}
       working-directory: greetings
