@@ -2,19 +2,19 @@ name: Deploying template
 
 on: push
 
-run-name: Deploy to ${{ inputs.environment }}
+run-name: Deploy to ${{ matrix.environment }}
 
 jobs:
   deploy:
-    runs-on: ubuntu
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.2
         with:
           repository: mtararujs/python-greetings
           path: greetings
-      - run: echo "This job deploys to ${{ inputs.environment }}"
-      - run: pm2 delete greetings-app-${{ inputs.environment }} || true
+      - run: echo "This job deploys to ${{ matrix.environment }}"
+      - run: pm2 delete greetings-app-${{ matrix.environment }} || true
         working-directory: greetings
-      - run: pm2 start app.py --name greetings-app-${{ inputs.environment }} -- --port ${{ inputs.port }}
+      - run: pm2 start app.py --name greetings-app-${{ matrix.environment }} -- --port ${{ matrix.port }}
         working-directory: greetings
