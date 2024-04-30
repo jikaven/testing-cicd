@@ -3,8 +3,10 @@ on:
     inputs:
       environment:
         required: true
+        type: string
       port:
         required: true
+        type: string
 
 run-name: Deploy to ${{ inputs.environment }}
 
