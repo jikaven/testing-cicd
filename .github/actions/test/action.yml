@@ -16,6 +16,9 @@ runs:
         path: test
 
     - shell: bash
+      run: ls test
+
+    - shell: bash
       run: echo "This job tests ${{ inputs.env }}"
 
     - shell: bash
