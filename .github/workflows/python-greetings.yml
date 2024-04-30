@@ -19,8 +19,8 @@ jobs:
     runs-on: self-hosted
     name: Deploy to dev
     steps:
-      - uses: https://github.com/jikaven/testing-cicd/actions/checkout@v3.5.2
-      - uses: actions/deploy@main
+      - uses: actions/checkout@v3.5.2
+      - uses: ./.github/actions/deploy@main
         with:
           environment: dev
           port: 7000
