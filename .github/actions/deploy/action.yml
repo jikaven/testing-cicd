@@ -2,7 +2,7 @@ name: Deploy to environment
 description: Action to deploy an environment
 
 inputs:
-  environment:
+  env:
     required: true
     description: Environment to launch service on
   port:

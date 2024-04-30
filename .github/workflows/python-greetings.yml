@@ -19,10 +19,10 @@ jobs:
     runs-on: self-hosted
     name: Deploy to dev
     steps:
-      - uses: actions/checkout@v3.5.2
-      - uses: ./.github/actions/deploy@main
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/deploy
         with:
-          environment: dev
+          env: dev
           port: 7000
     # steps:
     #   - name: Deploy
