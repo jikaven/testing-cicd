@@ -1,6 +1,12 @@
-on: push
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+      port:
+        required: true
 
-run-name: Deploy to ${{ matrix.environment }}
+run-name: Deploy to ${{ inputs.environment }}
 
 jobs:
   deploy:
@@ -11,8 +17,8 @@ jobs:
         with:
           repository: mtararujs/python-greetings
           path: greetings
-      - run: echo "This job deploys to ${{ matrix.environment }}"
-      - run: pm2 delete greetings-app-${{ matrix.environment }} || true
+      - run: echo "This job deploys to ${{ inputs.environment }}"
+      - run: pm2 delete greetings-app-${{ inputs.environment }} || true
         working-directory: greetings
-      - run: pm2 start app.py --name greetings-app-${{ matrix.environment }} -- --port ${{ matrix.port }}
+      - run: pm2 start app.py --name greetings-app-${{ inputs.environment }} -- --port ${{ inputs.port }}
         working-directory: greetings

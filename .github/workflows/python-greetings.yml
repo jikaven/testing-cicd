@@ -16,7 +16,12 @@ jobs:
         working-directory: greetings
 
   deploy-to-dev:
-    uses: ./.github/actions/deploy.yml
+    uses: "./.github/actions/deploy.yml"
+    with:
+      config-path: .github/actions/deploy.yml
+    inputs:
+      environment: dev
+      port: 7000
     # steps:
     #   - name: Deploy
     #     uses: "./.github/actions"
